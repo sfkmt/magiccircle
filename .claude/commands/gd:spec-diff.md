@@ -4,7 +4,7 @@
 
 ## 使用方法
 ```
-/kiro:spec-diff [feature-name] [phase]
+/gd:spec-diff [feature-name] [phase]
 ```
 
 ## パラメータ
@@ -23,7 +23,7 @@
 
 1. Gitの履歴から変更を検出：
 ```bash
-git log --oneline .kiro/specs/[feature-name]/
+git log --oneline .gd/specs/[feature-name]/
 ```
 
 2. 差分レポートを生成：

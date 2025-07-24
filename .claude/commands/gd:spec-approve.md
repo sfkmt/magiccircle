@@ -4,7 +4,7 @@
 
 ## 使用方法
 ```
-/kiro:spec-approve [feature-name] [phase]
+/gd:spec-approve [feature-name] [phase]
 ```
 
 ## パラメータ
@@ -21,7 +21,7 @@
 
 指定されたフェーズを承認します。
 
-1. `.kiro/specs/[feature-name]/spec.json`を読み込み
+1. `.gd/specs/[feature-name]/spec.json`を読み込み
 2. 指定されたフェーズの文書が存在し、statusが"draft"であることを確認
 3. 以下の確認をユーザーに促す：
    - 文書の内容を十分にレビューしたか
@@ -41,8 +41,8 @@
 ```
 
 5. 承認完了メッセージを表示：
-   - requirementsが承認された場合：「次は`/kiro:spec-design`で技術設計を開始できます」
-   - designが承認された場合：「次は`/kiro:spec-tasks`でタスク生成を開始できます」
+   - requirementsが承認された場合：「次は`/gd:spec-design`で技術設計を開始できます」
+   - designが承認された場合：「次は`/gd:spec-tasks`でタスク生成を開始できます」
    - tasksが承認された場合：「仕様書が完成しました！実装を開始できます」
 
 注意：一度承認したフェーズは、明示的な理由なく取り消すべきではありません。

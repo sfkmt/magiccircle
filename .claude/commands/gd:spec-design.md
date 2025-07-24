@@ -16,7 +16,7 @@
 
 要件定義に基づいて技術設計を作成します。
 
-1. `.kiro/specs/[feature-name]/requirements.md`を読み込み
+1. `.gd/specs/[feature-name]/requirements.md`を読み込み
 2. `spec.json`でrequirementsフェーズが承認済みか確認
 3. `design.md`を以下の構成で生成：
 

@@ -4,7 +4,7 @@ AIへの入力コンテキストを最適化します。不要な情報を除外
 
 ## 使用方法
 ```
-/kiro:context-optimize [target] [scope]
+/gd:context-optimize [target] [scope]
 ```
 
 ## パラメータ

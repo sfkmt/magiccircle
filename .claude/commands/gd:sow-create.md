@@ -4,7 +4,7 @@
 
 ## 使用方法
 ```
-/kiro:sow-create [type] [target]
+/gd:sow-create [type] [target]
 ```
 
 ## パラメータ
@@ -83,4 +83,4 @@
 ### 4. カスタムSOWの場合（type=custom）
 ユーザーの指定に基づいてSOWを生成
 
-生成されたSOWは`.kiro/sows/`ディレクトリに保存され、タスクやフェーズから参照可能です。
+生成されたSOWは`.gd/sows/`ディレクトリに保存され、タスクやフェーズから参照可能です。

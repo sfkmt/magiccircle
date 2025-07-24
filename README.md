@@ -1,10 +1,12 @@
-# Claude Code Spec-Driven Development
+# GAME DESIGN - Claude Code Spec-Driven Development Framework
 
-Claude Codeに最適化された仕様書駆動開発（Spec-Driven Development）フレームワークです。
+Claude Codeに最適化された仕様書駆動開発（Spec-Driven Development）フレームワーク「GAME DESIGN」です。
 
 ## 概要
 
-このプロジェクトは、[Kiro](https://kiro.io/)の仕様書駆動開発プロセスをClaude Codeのスラッシュコマンドで再現したものです。AIによる文書生成と人間によるレビューを組み合わせて、高品質なソフトウェア開発を実現します。
+GAME DESIGN（ゲームデザイン）は、仕様書駆動開発プロセスをClaude Codeのスラッシュコマンドで実現した革新的なフレームワークです。AIによる文書生成と人間によるレビューを組み合わせて、高品質なソフトウェア開発を実現します。
+
+*注：このプロジェクトは[Kiro](https://kiro.io/)の仕様書駆動開発のコンセプトにインスパイアされ、それをさらに発展させたものです。*
 
 ## 特徴
 
@@ -35,31 +37,31 @@ cp CLAUDE.md /path/to/your/project/
 
 ```bash
 # 1. ステアリング文書の初期化（推奨）
-/kiro:steering-init
+/gd:steering-init
 
 # 2. 新機能の仕様書作成開始
-/kiro:spec-init feature-name
+/gd:spec-init feature-name
 
 # 3. 要件定義の生成
-/kiro:spec-requirements
+/gd:spec-requirements
 
 # 4. 要件の承認
-/kiro:spec-approve feature-name requirements
+/gd:spec-approve feature-name requirements
 
 # 5. 技術設計の生成
-/kiro:spec-design
+/gd:spec-design
 
 # 6. 設計の承認
-/kiro:spec-approve feature-name design
+/gd:spec-approve feature-name design
 
 # 7. タスクの生成
-/kiro:spec-tasks
+/gd:spec-tasks
 
 # 8. タスクの承認
-/kiro:spec-approve feature-name tasks
+/gd:spec-approve feature-name tasks
 
 # 9. 進捗確認
-/kiro:spec-status
+/gd:spec-status
 ```
 
 ## ディレクトリ構造
@@ -68,15 +70,15 @@ cp CLAUDE.md /path/to/your/project/
 your-project/
 ├── .claude/
 │   └── commands/          # スラッシュコマンド定義
-│       ├── kiro:steering-init.md
-│       ├── kiro:steering-update.md
-│       ├── kiro:spec-init.md
-│       ├── kiro:spec-requirements.md
-│       ├── kiro:spec-design.md
-│       ├── kiro:spec-tasks.md
-│       ├── kiro:spec-status.md
-│       └── kiro:spec-approve.md
-├── .kiro/
+│       ├── gd:steering-init.md
+│       ├── gd:steering-update.md
+│       ├── gd:spec-init.md
+│       ├── gd:spec-requirements.md
+│       ├── gd:spec-design.md
+│       ├── gd:spec-tasks.md
+│       ├── gd:spec-status.md
+│       └── gd:spec-approve.md
+├── .gd/
 │   ├── steering/          # ステアリング文書
 │   │   └── README.md
 │   └── specs/            # 機能仕様書
@@ -85,7 +87,7 @@ your-project/
 │           ├── requirements.md # 要件定義
 │           ├── design.md      # 技術設計
 │           └── tasks.md       # 実装タスク
-├── .kiro/
+├── .gd/
 │   ├── steering/          # ステアリング文書
 │   │   └── README.md
 │   ├── specs/            # 機能仕様書
@@ -106,23 +108,23 @@ your-project/
 
 | コマンド | 説明 |
 |---------|------|
-| `/kiro:steering-init` | プロジェクトのステアリング文書を初期化 |
-| `/kiro:steering-update` | ステアリング文書を更新 |
-| `/kiro:spec-init [name]` | 新機能の仕様書作成を開始 |
-| `/kiro:spec-requirements` | 要件定義文書を生成 |
-| `/kiro:spec-design` | 技術設計文書を生成 |
-| `/kiro:spec-tasks` | 実装タスクを生成 |
-| `/kiro:spec-approve [name] [phase]` | 指定フェーズを承認 |
-| `/kiro:spec-status` | プロジェクト全体の進捗確認 |
+| `/gd:steering-init` | プロジェクトのステアリング文書を初期化 |
+| `/gd:steering-update` | ステアリング文書を更新 |
+| `/gd:spec-init [name]` | 新機能の仕様書作成を開始 |
+| `/gd:spec-requirements` | 要件定義文書を生成 |
+| `/gd:spec-design` | 技術設計文書を生成 |
+| `/gd:spec-tasks` | 実装タスクを生成 |
+| `/gd:spec-approve [name] [phase]` | 指定フェーズを承認 |
+| `/gd:spec-status` | プロジェクト全体の進捗確認 |
 
 ### SOW統合コマンド
 
 | コマンド | 説明 |
 |---------|------|
-| `/kiro:sow-create [type] [target]` | 作業用SOWを生成 |
-| `/kiro:task-execute [feature] [task-id]` | SOWベースでタスクを実行 |
-| `/kiro:spec-diff [feature] [phase]` | 仕様書の差分を表示 |
-| `/kiro:context-optimize [target] [scope]` | AIコンテキストを最適化 |
+| `/gd:sow-create [type] [target]` | 作業用SOWを生成 |
+| `/gd:task-execute [feature] [task-id]` | SOWベースでタスクを実行 |
+| `/gd:spec-diff [feature] [phase]` | 仕様書の差分を表示 |
+| `/gd:context-optimize [target] [scope]` | AIコンテキストを最適化 |
 
 ## ワークフロー
 
@@ -161,4 +163,4 @@ MIT License
 
 ## 謝辞
 
-このプロジェクトは[Kiro](https://kiro.io/)の仕様書駆動開発の概念に基づいています。
+このプロジェクトは[Kiro](https://kiro.io/)の仕様書駆動開発の概念にインスパイアされ、それをGAME DESIGNメソドロジーとして発展させたものです。

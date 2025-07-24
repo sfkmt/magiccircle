@@ -4,7 +4,7 @@
 
 ## 使用方法
 ```
-/kiro:task-execute [feature-name] [task-id]
+/gd:task-execute [feature-name] [task-id]
 ```
 
 ## パラメータ
@@ -22,7 +22,7 @@
 
 指定されたタスクを実行します。
 
-1. `.kiro/specs/[feature-name]/tasks.md`からタスク情報を取得
+1. `.gd/specs/[feature-name]/tasks.md`からタスク情報を取得
 2. 以下の構造でタスク専用SOWを生成：
 
 ```markdown
@@ -73,10 +73,10 @@
 - [ ] ドキュメント更新（必要な場合）
 ```
 
-3. SOWを`.kiro/sows/[feature-name]/[task-id].md`に保存
+3. SOWを`.gd/sows/[feature-name]/[task-id].md`に保存
 4. SOWに基づいて実装を実行
 5. 実装完了後、タスクのステータスを更新：
-   - `.kiro/specs/[feature-name]/tasks.md`のチェックボックスをチェック
+   - `.gd/specs/[feature-name]/tasks.md`のチェックボックスをチェック
    - 実装時間を記録
    - 実装の要約を追加
 

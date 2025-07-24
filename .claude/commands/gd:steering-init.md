@@ -4,7 +4,7 @@
 
 ## 実行内容
 
-1. `.kiro/steering/README.md`を作成
+1. `.gd/steering/README.md`を作成
 2. プロジェクトの基本情報を収集
 3. 初期のステアリング文書を生成
 
@@ -25,4 +25,4 @@
 - 主要な決定事項
 - 今後の課題
 
-文書は`.kiro/steering/README.md`に保存します。
+文書は`.gd/steering/README.md`に保存します。

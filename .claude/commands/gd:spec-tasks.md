@@ -16,7 +16,7 @@
 
 技術設計に基づいて実装タスクを生成します。
 
-1. `.kiro/specs/[feature-name]/design.md`を読み込み
+1. `.gd/specs/[feature-name]/design.md`を読み込み
 2. `spec.json`でdesignフェーズが承認済みか確認
 3. `tasks.md`を以下の構成で生成：
 
