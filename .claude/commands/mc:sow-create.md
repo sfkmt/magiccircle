@@ -4,7 +4,7 @@
 
 ## 使用方法
 ```
-/gd:sow-create [type] [target]
+/mc:sow-create [type] [target]
 ```
 
 ## パラメータ

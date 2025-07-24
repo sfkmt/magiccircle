@@ -4,7 +4,7 @@
 
 ## 使用方法
 ```
-/gd:spec-diff [feature-name] [phase]
+/mc:spec-diff [feature-name] [phase]
 ```
 
 ## パラメータ

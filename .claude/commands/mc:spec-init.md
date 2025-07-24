@@ -4,7 +4,7 @@
 
 ## 使用方法
 ```
-/gd:spec-init [feature-name]
+/mc:spec-init [feature-name]
 ```
 
 ## 実行内容
@@ -51,4 +51,4 @@
 
 3. 機能の概要説明をユーザーに確認し、metadataに記録
 
-これで仕様書作成の準備が整いました。次は`/gd:spec-requirements`で要件定義を開始してください。
+これで仕様書作成の準備が整いました。次は`/mc:spec-requirements`で要件定義を開始してください。

@@ -4,7 +4,7 @@ AIへの入力コンテキストを最適化します。不要な情報を除外
 
 ## 使用方法
 ```
-/gd:context-optimize [target] [scope]
+/mc:context-optimize [target] [scope]
 ```
 
 ## パラメータ

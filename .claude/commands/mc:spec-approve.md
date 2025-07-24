@@ -4,7 +4,7 @@
 
 ## 使用方法
 ```
-/gd:spec-approve [feature-name] [phase]
+/mc:spec-approve [feature-name] [phase]
 ```
 
 ## パラメータ
@@ -41,8 +41,8 @@
 ```
 
 5. 承認完了メッセージを表示：
-   - requirementsが承認された場合：「次は`/gd:spec-design`で技術設計を開始できます」
-   - designが承認された場合：「次は`/gd:spec-tasks`でタスク生成を開始できます」
+   - requirementsが承認された場合：「次は`/mc:spec-design`で技術設計を開始できます」
+   - designが承認された場合：「次は`/mc:spec-tasks`でタスク生成を開始できます」
    - tasksが承認された場合：「仕様書が完成しました！実装を開始できます」
 
 注意：一度承認したフェーズは、明示的な理由なく取り消すべきではありません。

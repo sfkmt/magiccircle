@@ -4,7 +4,7 @@
 
 ## 使用方法
 ```
-/gd:task-execute [feature-name] [task-id]
+/mc:task-execute [feature-name] [task-id]
 ```
 
 ## パラメータ
