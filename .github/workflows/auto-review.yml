@@ -1,0 +1,202 @@
+name: Automated PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches: [main, develop]
+
+jobs:
+  spec-compliance-check:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'mc-automated')
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Review Tools
+        run: |
+          npm install -g @mc-framework/reviewer
+          curl -sSL https://github.com/mc-framework/mc-cli/releases/latest/download/mc-cli-linux-amd64 -o mc-cli
+          chmod +x mc-cli
+          sudo mv mc-cli /usr/local/bin/
+      
+      - name: Extract Spec Information
+        id: spec-info
+        run: |
+          # PRのブランチ名から仕様名を抽出
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          SPEC_NAME=$(echo "$BRANCH_NAME" | grep -oP 'feature/\K[^-]+' || echo "unknown")
+          echo "spec_name=$SPEC_NAME" >> $GITHUB_OUTPUT
+          
+          # タスクIDを抽出
+          TASK_ID=$(echo "$BRANCH_NAME" | grep -oP 'task-\K\d+' || echo "0")
+          echo "task_id=$TASK_ID" >> $GITHUB_OUTPUT
+      
+      - name: Validate Against Spec
+        run: |
+          mc-cli validate-pr \
+            --spec ${{ steps.spec-info.outputs.spec_name }} \
+            --task ${{ steps.spec-info.outputs.task_id }} \
+            --pr ${{ github.event.pull_request.number }} \
+            --output validation-report.json
+      
+      - name: Code Quality Check
+        run: |
+          # コード品質チェック
+          mc-reviewer analyze \
+            --type quality \
+            --diff origin/${{ github.base_ref }}...HEAD \
+            --output quality-report.json
+      
+      - name: Security Scan
+        run: |
+          # セキュリティスキャン
+          mc-reviewer analyze \
+            --type security \
+            --diff origin/${{ github.base_ref }}...HEAD \
+            --output security-report.json
+      
+      - name: Design Pattern Compliance
+        run: |
+          # 設計パターンの適合性チェック
+          mc-cli check-patterns \
+            --spec ${{ steps.spec-info.outputs.spec_name }} \
+            --changes "$(git diff origin/${{ github.base_ref }}...HEAD --name-only)" \
+            --output pattern-report.json
+      
+      - name: Generate Review Summary
+        id: review
+        run: |
+          # レビュー結果の集約
+          node -e "
+          const fs = require('fs');
+          
+          const validation = JSON.parse(fs.readFileSync('validation-report.json', 'utf8'));
+          const quality = JSON.parse(fs.readFileSync('quality-report.json', 'utf8'));
+          const security = JSON.parse(fs.readFileSync('security-report.json', 'utf8'));
+          const patterns = JSON.parse(fs.readFileSync('pattern-report.json', 'utf8'));
+          
+          const passed = validation.passed && quality.passed && security.passed && patterns.passed;
+          const score = Math.round((validation.score + quality.score + security.score + patterns.score) / 4);
+          
+          console.log(\`passed=\${passed}\`);
+          console.log(\`score=\${score}\`);
+          console.log(\`validation_passed=\${validation.passed}\`);
+          console.log(\`quality_passed=\${quality.passed}\`);
+          console.log(\`security_passed=\${security.passed}\`);
+          console.log(\`patterns_passed=\${patterns.passed}\`);
+          " >> $GITHUB_OUTPUT
+      
+      - name: Post Review Comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            // レポートを読み込み
+            const validation = JSON.parse(fs.readFileSync('validation-report.json', 'utf8'));
+            const quality = JSON.parse(fs.readFileSync('quality-report.json', 'utf8'));
+            const security = JSON.parse(fs.readFileSync('security-report.json', 'utf8'));
+            const patterns = JSON.parse(fs.readFileSync('pattern-report.json', 'utf8'));
+            
+            // レビューコメントの作成
+            const reviewBody = `
+            ## 🤖 自動レビュー結果
+            
+            **総合スコア**: ${{ steps.review.outputs.score }}/100
+            
+            ### 📋 仕様適合性
+            - **ステータス**: ${validation.passed ? '✅ 合格' : '❌ 不合格'}
+            - **スコア**: ${validation.score}/100
+            - **詳細**: ${validation.summary}
+            
+            ### 🔍 コード品質
+            - **ステータス**: ${quality.passed ? '✅ 合格' : '❌ 不合格'}
+            - **スコア**: ${quality.score}/100
+            - **問題点**: ${quality.issues.length}件
+            ${quality.issues.slice(0, 3).map(i => `  - ${i.message}`).join('\n')}
+            
+            ### 🔒 セキュリティ
+            - **ステータス**: ${security.passed ? '✅ 合格' : '❌ 不合格'}
+            - **スコア**: ${security.score}/100
+            - **脆弱性**: ${security.vulnerabilities.length}件
+            ${security.vulnerabilities.slice(0, 3).map(v => `  - ${v.severity}: ${v.message}`).join('\n')}
+            
+            ### 🏗️ 設計パターン
+            - **ステータス**: ${patterns.passed ? '✅ 合格' : '❌ 不合格'}
+            - **スコア**: ${patterns.score}/100
+            - **推奨事項**: ${patterns.recommendations.length}件
+            ${patterns.recommendations.slice(0, 3).map(r => `  - ${r}`).join('\n')}
+            
+            ### 📊 詳細レポート
+            - [仕様適合性レポート](${validation.detailsUrl || '#'})
+            - [コード品質レポート](${quality.detailsUrl || '#'})
+            - [セキュリティレポート](${security.detailsUrl || '#'})
+            - [設計パターンレポート](${patterns.detailsUrl || '#'})
+            
+            ---
+            *このレビューは自動生成されました。質問がある場合は、仕様書（.mc/specs/${{ steps.spec-info.outputs.spec_name }}）を参照してください。*
+            `;
+            
+            // PRにコメントを投稿
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: reviewBody
+            });
+            
+            // レビューステータスの設定
+            const event = ${{ steps.review.outputs.passed }} ? 'APPROVE' : 'REQUEST_CHANGES';
+            await github.rest.pulls.createReview({
+              pull_request_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event: event,
+              body: ${{ steps.review.outputs.passed }} 
+                ? '自動レビューに合格しました。マージの準備ができています。' 
+                : '自動レビューで問題が検出されました。上記のフィードバックを確認してください。'
+            });
+      
+      - name: Update PR Labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = ['mc-reviewed'];
+            
+            if (${{ steps.review.outputs.passed }}) {
+              labels.push('ready-to-merge');
+            } else {
+              labels.push('needs-work');
+            }
+            
+            if (${{ steps.review.outputs.score }} >= 90) {
+              labels.push('high-quality');
+            }
+            
+            await github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: labels
+            });
+
+  update-task-status:
+    needs: spec-compliance-check
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Update Task Progress
+        run: |
+          # タスクの進捗を更新
+          SPEC_NAME=$(echo "${{ github.event.pull_request.head.ref }}" | grep -oP 'feature/\K[^-]+' || echo "unknown")
+          TASK_ID=$(echo "${{ github.event.pull_request.head.ref }}" | grep -oP 'task-\K\d+' || echo "0")
+          
+          mc-cli update-task-status \
+            --spec "$SPEC_NAME" \
+            --task "$TASK_ID" \
+            --status "in-review" \
+            --pr "${{ github.event.pull_request.number }}"

@@ -1,0 +1,172 @@
+name: Spec-Driven Development with Claude Code
+
+on:
+  issues:
+    types: [opened, labeled]
+  workflow_dispatch:
+    inputs:
+      spec_name:
+        description: 'Name of the spec to process'
+        required: true
+      phase:
+        description: 'Phase to execute'
+        required: true
+        type: choice
+        options:
+          - requirements
+          - design
+          - tasks
+          - execute
+
+jobs:
+  validate-spec:
+    runs-on: ubuntu-latest
+    if: contains(github.event.label.name, 'mc-spec') || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup MC CLI
+        run: |
+          curl -sSL https://github.com/mc-framework/mc-cli/releases/latest/download/mc-cli-linux-amd64 -o mc-cli
+          chmod +x mc-cli
+          sudo mv mc-cli /usr/local/bin/
+      
+      - name: Validate Spec Structure
+        run: |
+          spec_name="${{ github.event.inputs.spec_name || github.event.issue.title }}"
+          mc-cli validate-spec --name "$spec_name"
+
+  execute-task:
+    runs-on: ubuntu-latest
+    if: contains(github.event.label.name, 'mc-task')
+    strategy:
+      matrix:
+        claude-instance: [1, 2, 3]  # 並列実行用
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Claude Code
+        uses: anthropics/claude-code-action@v1
+        # サブスクリプションプランを使用（API キー不要）
+      
+      - name: Extract Task Information
+        id: task-info
+        run: |
+          # イシューからタスク情報を抽出
+          echo "task_id=${{ github.event.issue.number }}" >> $GITHUB_OUTPUT
+          echo "spec_name=$(echo '${{ github.event.issue.body }}' | grep -oP 'Spec: \K[^\s]+')" >> $GITHUB_OUTPUT
+          echo "task_file=$(echo '${{ github.event.issue.body }}' | grep -oP 'Task: \K[^\s]+')" >> $GITHUB_OUTPUT
+      
+      - name: Execute Task with Claude Code
+        uses: anthropics/claude-code-action@v1
+        with:
+          command: |
+            # タスクのコンテキストを準備
+            mc-cli prepare-context \
+              --spec ${{ steps.task-info.outputs.spec_name }} \
+              --task ${{ steps.task-info.outputs.task_id }}
+            
+            # タスク詳細を取得して実行
+            TASK_CONTENT=$(mc-cli get-task \
+              --spec ${{ steps.task-info.outputs.spec_name }} \
+              --task ${{ steps.task-info.outputs.task_id }})
+            
+            echo "$TASK_CONTENT" | claude-code --no-interactive
+          output-path: .mc/results/task-${{ steps.task-info.outputs.task_id }}
+      
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "feat: Complete task #${{ steps.task-info.outputs.task_id }} for ${{ steps.task-info.outputs.spec_name }}"
+          title: "Task #${{ steps.task-info.outputs.task_id }}: ${{ github.event.issue.title }}"
+          body: |
+            ## 概要
+            このPRはタスク #${{ steps.task-info.outputs.task_id }} の実装です。
+            
+            ### 関連仕様
+            - Spec: `${{ steps.task-info.outputs.spec_name }}`
+            - Task ID: `${{ steps.task-info.outputs.task_id }}`
+            
+            ### Claude Code実行ログ
+            ```
+            実行インスタンス: claude-instance-${{ matrix.claude-instance }}
+            開始時刻: ${{ steps.task-info.outputs.start_time }}
+            終了時刻: ${{ steps.task-info.outputs.end_time }}
+            ```
+            
+            ### チェックリスト
+            - [ ] コードレビュー完了
+            - [ ] テスト通過
+            - [ ] 仕様との整合性確認
+            
+            Closes #${{ steps.task-info.outputs.task_id }}
+          branch: task-${{ steps.task-info.outputs.task_id }}-instance-${{ matrix.claude-instance }}
+          labels: |
+            mc-automated
+            task-implementation
+            spec-${{ steps.task-info.outputs.spec_name }}
+
+  aggregate-results:
+    needs: execute-task
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Aggregate Task Results
+        run: |
+          mc-cli aggregate-results \
+            --spec ${{ github.event.inputs.spec_name }} \
+            --output .mc/results/aggregated
+      
+      - name: Update Spec Progress
+        run: |
+          mc-cli update-progress \
+            --spec ${{ github.event.inputs.spec_name }} \
+            --results .mc/results/aggregated
+      
+      - name: Generate Progress Report
+        run: |
+          mc-cli generate-report \
+            --spec ${{ github.event.inputs.spec_name }} \
+            --format markdown \
+            --output progress-report.md
+      
+      - name: Comment on Original Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('progress-report.md', 'utf8');
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });
+
+  feedback-loop:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'mc-automated')
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Analyze Implementation
+        run: |
+          mc-cli analyze-implementation \
+            --pr ${{ github.event.pull_request.number }} \
+            --output .mc/feedback/analysis.json
+      
+      - name: Update Design Patterns
+        run: |
+          mc-cli update-patterns \
+            --analysis .mc/feedback/analysis.json \
+            --patterns .mc/patterns/design-patterns.json
+      
+      - name: Optimize Future Context
+        run: |
+          mc-cli optimize-context \
+            --feedback .mc/feedback/analysis.json \
+            --update-templates

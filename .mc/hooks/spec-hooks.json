@@ -1,0 +1,75 @@
+{
+  "pre-approval": {
+    "requirements": {
+      "validate-format": {
+        "command": "mc-cli validate-requirements --file {file}",
+        "blocking": true,
+        "description": "要件定義文書のフォーマットを検証"
+      },
+      "check-completeness": {
+        "command": "mc-cli check-requirements-completeness --file {file}",
+        "blocking": false,
+        "description": "要件の完全性をチェック"
+      }
+    },
+    "design": {
+      "validate-alignment": {
+        "command": "mc-cli validate-design-alignment --spec {spec_name}",
+        "blocking": true,
+        "description": "要件との整合性を検証"
+      },
+      "check-feasibility": {
+        "command": "mc-cli check-technical-feasibility --file {file}",
+        "blocking": false,
+        "description": "技術的実現可能性をチェック"
+      }
+    },
+    "tasks": {
+      "validate-dependencies": {
+        "command": "mc-cli validate-task-dependencies --file {file}",
+        "blocking": true,
+        "description": "タスクの依存関係を検証"
+      },
+      "estimate-complexity": {
+        "command": "mc-cli estimate-task-complexity --file {file}",
+        "blocking": false,
+        "description": "タスクの複雑度を推定"
+      }
+    }
+  },
+  "post-approval": {
+    "requirements": {
+      "notify-team": {
+        "command": "mc-cli notify-slack --channel #spec-updates --message 'Requirements approved for {spec_name}'",
+        "description": "チームに要件承認を通知"
+      }
+    },
+    "design": {
+      "create-branch": {
+        "command": "git checkout -b feature/{spec_name}",
+        "description": "実装用ブランチを作成"
+      }
+    },
+    "tasks": {
+      "create-github-issues": {
+        "command": "mc-cli create-github-issues --spec {spec_name}",
+        "blocking": true,
+        "description": "GitHubイシューを自動作成"
+      },
+      "trigger-ci": {
+        "command": "gh workflow run spec-driven-dev.yml -f spec_name={spec_name}",
+        "description": "CI/CDパイプラインをトリガー"
+      }
+    }
+  },
+  "on-task-complete": {
+    "update-progress": {
+      "command": "mc-cli update-task-progress --task {task_id} --status completed",
+      "description": "タスクの進捗を更新"
+    },
+    "check-milestone": {
+      "command": "mc-cli check-milestone-completion --spec {spec_name}",
+      "description": "マイルストーンの完了をチェック"
+    }
+  }
+}
