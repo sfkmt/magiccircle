@@ -26,6 +26,7 @@
 
 ## 利用可能なスラッシュコマンド
 
+### 基本コマンド
 - `/kiro:steering-init` - ステアリング文書の初期化
 - `/kiro:steering-update` - ステアリング文書の更新
 - `/kiro:spec-init` - 新機能の仕様書作成開始
@@ -33,6 +34,13 @@
 - `/kiro:spec-design` - 技術設計文書の作成
 - `/kiro:spec-tasks` - 実装タスクの生成
 - `/kiro:spec-status` - 現在のプロジェクト進捗確認
+- `/kiro:spec-approve` - フェーズの承認
+
+### SOW統合コマンド
+- `/kiro:sow-create` - 作業用SOWの生成
+- `/kiro:task-execute` - SOWベースのタスク実行
+- `/kiro:spec-diff` - 仕様書の差分表示
+- `/kiro:context-optimize` - AIコンテキストの最適化
 
 ## 開発フロー
 

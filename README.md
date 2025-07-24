@@ -13,6 +13,9 @@ Claude Codeに最適化された仕様書駆動開発（Spec-Driven Development�
 - 👥 **人間のレビュー必須**: 各フェーズで人間による承認が必要
 - 📁 **整理された構造**: 仕様書は自動的に整理・管理
 - 🔄 **ステアリング文書**: プロジェクトの方向性を継続的に管理
+- 📝 **SOW統合**: 各タスクに対する精密な作業指示書を生成
+- 🔍 **差分管理**: 仕様変更の影響を可視化
+- ⚡ **コンテキスト最適化**: AIへの入力を最適化して精度向上
 
 ## クイックスタート
 
@@ -82,10 +85,24 @@ your-project/
 │           ├── requirements.md # 要件定義
 │           ├── design.md      # 技術設計
 │           └── tasks.md       # 実装タスク
+├── .kiro/
+│   ├── steering/          # ステアリング文書
+│   │   └── README.md
+│   ├── specs/            # 機能仕様書
+│   │   └── [feature-name]/
+│   │       ├── spec.json       # フェーズ承認状態
+│   │       ├── requirements.md # 要件定義
+│   │       ├── design.md      # 技術設計
+│   │       └── tasks.md       # 実装タスク
+│   └── sows/             # Statement of Work
+│       └── [feature-name]/
+│           └── [task-id].md    # タスク別SOW
 └── CLAUDE.md             # Claude Code設定
 ```
 
 ## スラッシュコマンド一覧
+
+### 基本コマンド
 
 | コマンド | 説明 |
 |---------|------|
@@ -97,6 +114,15 @@ your-project/
 | `/kiro:spec-tasks` | 実装タスクを生成 |
 | `/kiro:spec-approve [name] [phase]` | 指定フェーズを承認 |
 | `/kiro:spec-status` | プロジェクト全体の進捗確認 |
+
+### SOW統合コマンド
+
+| コマンド | 説明 |
+|---------|------|
+| `/kiro:sow-create [type] [target]` | 作業用SOWを生成 |
+| `/kiro:task-execute [feature] [task-id]` | SOWベースでタスクを実行 |
+| `/kiro:spec-diff [feature] [phase]` | 仕様書の差分を表示 |
+| `/kiro:context-optimize [target] [scope]` | AIコンテキストを最適化 |
 
 ## ワークフロー
 
@@ -121,6 +147,9 @@ your-project/
 2. **承認は慎重に**: 一度承認したら基本的に戻さない
 3. **ステアリング文書を活用**: プロジェクトの方向性を定期的に確認
 4. **spec.jsonを信頼**: フェーズの状態管理はシステムに任せる
+5. **SOWで精度向上**: タスク実行前にSOWを生成して指示を明確化
+6. **差分を確認**: 仕様変更時は必ず影響範囲を確認
+7. **コンテキスト最適化**: 大規模なプロジェクトではコンテキストを最適化
 
 ## 貢献
 
