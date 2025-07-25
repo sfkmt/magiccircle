@@ -5,7 +5,7 @@ All notable changes to the MC (Magic Circle) Framework will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - 2025-01-25
+## [2.0.0] - 2025-07-25
 
 ### Added
 - **SOW (Statement of Work) Integration** - Complete automation framework for task execution
@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hooks system for customizable workflows
 - Pattern-based learning for continuous improvement
 
-## [1.2.0] - 2025-01-25
+## [1.2.0] - 2025-07-25
 
 ### Added
 - **GitHub Actions Integration**
@@ -49,14 +49,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Post-approval automation hooks
   - Task completion tracking hooks
 
-## [1.1.0] - 2025-01-24
+## [1.1.0] - 2025-07-24
 
 ### Changed
 - Rebranded from "GAME DESIGN (gd)" to "Magic Circle (mc)"
 - Updated all command prefixes from `gd:` to `mc:`
 - Renamed framework directories and documentation
 
-## [1.0.0] - 2025-01-24
+## [1.0.0] - 2025-07-24
 
 ### Added
 - Initial release of Spec-Driven Development framework
