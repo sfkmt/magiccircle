@@ -5,6 +5,32 @@ All notable changes to the MC (Magic Circle) Framework will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2025-07-27
+
+### Added
+- **GitHub Issues自動作成機能** - tasksフェーズ承認時の自動化
+  - `post-approve.sh` フックでGitHub Issuesを自動作成
+  - 依存関係を考慮した順序でIssue作成
+  - 適切なラベル付けとフォーマット
+- **プロジェクト状態自動同期機能** - CLAUDE.mdとCHANGELOG.mdの自動更新
+  - `/mc:project-sync` コマンドで手動同期
+  - Git pre-commitフックで自動同期
+  - Magic Circleフックでの自動同期
+- **Claude Code Actions統合ドキュメント** - MAXプランでの完全自動化ガイド
+- **ドキュメンテーションベストプラクティス** - セッション間でのコンテキスト維持
+
+### Enhanced
+- **CLAUDE.mdテンプレート** - プロジェクト固有情報を優先的に表示
+  - 現在の状態とNext Actionを最上部に配置
+  - プロジェクト概要と技術スタックを記録
+  - 重要な決定事項ログセクション
+- **自動同期の統合**
+  - すべてのMagic Circleフックで自動同期
+  - Gitコミット時に自動的にドキュメント更新
+
+### Fixed
+- 不要なワークフローファイルによるエラー通知の防止
+
 ## [2.0.0] - 2025-07-25
 
 ### Added
