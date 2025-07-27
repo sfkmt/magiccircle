@@ -1,10 +1,15 @@
 name: Magic Circle Auto Sync
 
+# This workflow is for projects using Magic Circle framework
+# It will only run if .mc/scripts/ exist in the repository
+
 on:
   issues:
     types: [closed, reopened]
   push:
     branches: [main]
+    paths-ignore:
+      - '.github/workflows/magic-circle-sync.yml'  # Avoid recursive triggers
   workflow_dispatch:
 
 jobs:
@@ -32,24 +37,31 @@ jobs:
       run: |
         echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
     
+    - name: Check for required scripts
+      id: check-scripts
+      run: |
+        if [ -f ".mc/scripts/update_project_state.py" ]; then
+          echo "scripts_exist=true" >> $GITHUB_OUTPUT
+        else
+          echo "scripts_exist=false" >> $GITHUB_OUTPUT
+          echo "⚠️ Magic Circle sync scripts not found in this repository"
+          echo "This workflow is designed for projects using Magic Circle framework"
+        fi
+    
     - name: Check for closed issues and update state
-      if: github.event_name == 'issues' && github.event.action == 'closed'
+      if: steps.check-scripts.outputs.scripts_exist == 'true' && github.event_name == 'issues' && github.event.action == 'closed'
       run: |
         echo "🎯 Issue #${{ github.event.issue.number }} was closed"
-        if [ -f ".mc/scripts/update_project_state.py" ]; then
-          python3 .mc/scripts/update_project_state.py
-        fi
+        python3 .mc/scripts/update_project_state.py
     
     - name: Regular sync on push
-      if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+      if: steps.check-scripts.outputs.scripts_exist == 'true' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
       run: |
         echo "📊 Running regular project state sync"
-        if [ -f ".mc/scripts/check_closed_issues.py" ]; then
-          python3 .mc/scripts/check_closed_issues.py 24
-        fi
+        python3 .mc/scripts/check_closed_issues.py 24
     
     - name: Commit and push changes
-      if: success()
+      if: steps.check-scripts.outputs.scripts_exist == 'true' && success()
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
