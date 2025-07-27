@@ -1,0 +1,61 @@
+name: Magic Circle Auto Sync
+
+on:
+  issues:
+    types: [closed, reopened]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  sync-project-state:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    
+    - name: Install GitHub CLI
+      run: |
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+        sudo apt update
+        sudo apt install gh
+    
+    - name: Authenticate GitHub CLI
+      run: |
+        echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+    
+    - name: Check for closed issues and update state
+      if: github.event_name == 'issues' && github.event.action == 'closed'
+      run: |
+        echo "🎯 Issue #${{ github.event.issue.number }} was closed"
+        if [ -f ".mc/scripts/update_project_state.py" ]; then
+          python3 .mc/scripts/update_project_state.py
+        fi
+    
+    - name: Regular sync on push
+      if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+      run: |
+        echo "📊 Running regular project state sync"
+        if [ -f ".mc/scripts/check_closed_issues.py" ]; then
+          python3 .mc/scripts/check_closed_issues.py 24
+        fi
+    
+    - name: Commit and push changes
+      if: success()
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add -A
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "chore: auto-sync project state [skip ci]"
+          git push

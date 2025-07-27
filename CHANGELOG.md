@@ -5,6 +5,22 @@ All notable changes to the MC (Magic Circle) Framework will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.2] - 2025-07-27
+
+### Added
+- **Issue完了時の自動同期機能**
+  - GitHub Actions workflow (`.github/workflows/magic-circle-sync.yml`)
+  - リアルタイム監視スクリプト (`watch_github_issues.py`)
+  - 手動チェックスクリプト (`check_closed_issues.py`)
+- **3つの同期方法を提供**
+  - GitHub Actions: Issueクローズ時に自動実行
+  - ローカル監視: リアルタイムでIssue状態を監視
+  - 手動チェック: 任意のタイミングで実行
+
+### Enhanced
+- タスク完了時もCLAUDE.mdとCHANGELOG.mdを自動更新
+- プロジェクトの進捗がリアルタイムに反映される
+
 ## [2.1.1] - 2025-07-27
 
 ### Changed
