@@ -17,6 +17,11 @@
 仕様書生成後（requirements, design, tasks）に自動実行されます。
 - ✅ プロジェクト状態を自動同期
 
+### post-sow-create.sh
+SOW（Statement of Work）作成後に自動実行されます。
+- ✅ プロジェクト状態を自動同期
+- 📄 作成されたSOWの保存先を通知
+
 ### post-task-complete.sh
 タスク完了時（Issue close時など）に自動実行されます。
 - ✅ プロジェクト状態を自動同期
