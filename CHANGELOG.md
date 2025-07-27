@@ -5,6 +5,23 @@ All notable changes to the MC (Magic Circle) Framework will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.4] - 2025-07-27
+
+### Fixed
+- GitHub Actionsワークフローのエラーを修正
+  - スクリプトが存在しない場合は処理をスキップ
+  - Magic Circleフレームワーク自体のリポジトリでは実行されない
+
+### Removed
+- 未実装のワークフローファイルを削除
+  - `spec-driven-dev.yml` - 存在しないツールを参照
+  - `auto-review.yml` - 存在しないツールを参照
+  - これらはClaude Code Actionsの意図しない自動起動を防ぐためにも削除
+
+### Clarified
+- Claude Code GitHub Actionsは`@claude`メンションでのみ動作することを明記
+- Issueの作成だけでは自動実行されない
+
 ## [2.1.3] - 2025-07-27
 
 ### Added
