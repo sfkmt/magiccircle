@@ -5,6 +5,19 @@ All notable changes to the MC (Magic Circle) Framework will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.1] - 2025-07-27
+
+### Changed
+- `/mc:project-sync`コマンドを削除（自動実行のみに変更）
+- 未実装のGitHub Actions関連コマンドをドキュメントから削除
+  - `/mc:github-issue-create` (post-approveフックで自動実行)
+  - `/mc:workflow-trigger` (@claudeメンションで自動実行)
+  - `/mc:feedback-analyze` (未実装)
+
+### Improved
+- ドキュメントの整合性向上
+- 不要なコマンドを削除してシンプル化
+
 ## [2.1.0] - 2025-07-27
 
 ### Added
