@@ -42,11 +42,6 @@
 - `/mc:spec-diff` - 仕様書の差分表示
 - `/mc:context-optimize` - AIコンテキストの最適化
 
-### GitHub Actions連携コマンド
-- `/mc:github-issue-create` - 承認済みタスクからGitHubイシューを自動作成
-- `/mc:workflow-trigger` - GitHub Actionsワークフローを手動トリガー
-- `/mc:feedback-analyze` - 実装結果を分析してパターンを抽出
-
 ## 開発フロー
 
 1. **ステアリング文書の作成**（推奨）
