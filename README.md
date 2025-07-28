@@ -33,19 +33,59 @@ Magic Circle（マジック・サークル）は、AIと人間の協調による
 
 ## クイックスタート
 
-### 1. プロジェクトへの統合
+### インストール方法
 
-以下の2つをあなたのプロジェクトにコピーするだけです：
+Magic Circleをプロジェクトに追加する方法はいくつかあります。
 
+#### 方法1: セットアップスクリプト（最も簡単）
 ```bash
-# .claude/commands/ ディレクトリをコピー
-cp -r .claude/commands/ /path/to/your/project/.claude/commands/
-
-# CLAUDE.md ファイルをコピー
-cp CLAUDE.md /path/to/your/project/
+# プロジェクトのルートディレクトリで実行
+curl -L https://raw.githubusercontent.com/sfkmt/magiccircle/main/setup-magiccircle.sh | bash
 ```
 
-### 2. 基本的な使い方
+#### 方法2: cURLでダウンロード（推奨）
+```bash
+# プロジェクトのルートディレクトリで実行
+curl -L https://github.com/sfkmt/magiccircle/archive/main.tar.gz | \
+tar -xz --strip-components=1 \
+  magiccircle-main/.claude \
+  magiccircle-main/CLAUDE.md
+```
+
+#### 方法3: degitを使用（Git履歴なし）
+```bash
+# degitをインストール（初回のみ）
+npm install -g degit
+
+# Magic Circleを取得
+degit sfkmt/magiccircle mc-temp
+cp -r mc-temp/.claude ./
+cp mc-temp/CLAUDE.md ./
+rm -rf mc-temp
+```
+
+#### 方法4: 手動ダウンロード
+```bash
+# ZIPファイルをダウンロード
+curl -L https://github.com/sfkmt/magiccircle/archive/main.zip -o mc.zip
+unzip mc.zip
+cp -r magiccircle-main/.claude ./
+cp magiccircle-main/CLAUDE.md ./
+rm -rf magiccircle-main mc.zip
+```
+
+#### 方法5: git cloneから必要なファイルのみコピー
+```bash
+# 一時ディレクトリにクローン
+git clone https://github.com/sfkmt/magiccircle.git /tmp/magiccircle
+cp -r /tmp/magiccircle/.claude ./
+cp /tmp/magiccircle/CLAUDE.md ./
+rm -rf /tmp/magiccircle
+```
+
+**重要**: Magic CircleのGit履歴（.gitディレクトリ）は含めないでください。既存プロジェクトのGit管理と競合します。
+
+### 基本的な使い方
 
 ```bash
 # 1. ステアリング文書の初期化（推奨）
