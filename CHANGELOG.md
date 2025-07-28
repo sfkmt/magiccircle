@@ -5,6 +5,17 @@ All notable changes to the MC (Magic Circle) Framework will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2025-07-28
+
+### Added
+- **品質チェックコマンド** (`/mc:quality-check`)
+  - Zennの記事を参考にしたリリース前の包括的品質チェック機能
+  - セキュリティ、パフォーマンス、SEO、アクセシビリティの4カテゴリでチェック
+  - デフォルトで検出された問題をGitHubイシューとして自動作成
+  - `--no-issues`オプションでイシュー作成を無効化可能
+  - 自動修正可能な問題への対応 (`--fix`オプション)
+  - CI/CDパイプラインとの統合対応
+
 ## [2.1.4] - 2025-07-27
 
 ### Fixed
