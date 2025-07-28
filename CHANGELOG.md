@@ -11,8 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **フレームワーク名の明確化**: Goal-Oriented Self-Regulation Framework「Magic Circle」として再定義
   - 仕様書駆動開発からゴール指向型自己制御フレームワークへの進化
   - プロジェクトのゴールを明確にし、自律的なフィードバックループを通じて継続的に改善
+- **タスク生成方式の根本的変更**: 全タスク一括生成から最小デプロイ単位（MVP）での反復生成へ
+  - `/mc:spec-tasks` - 最大4時間で完了可能なMVPタスクのみを生成
+  - 各イテレーションでデプロイ可能な成果物を生成
+  - フィードバック制御の原理に基づく継続的改善
 
 ### Added
+- **Goal-Oriented Self-Regulationコマンド**
+  - `/mc:iteration-feedback` - デプロイ後のフィードバック収集と次のイテレーション計画
+  - `/mc:iteration-status` - イテレーション履歴と進捗の可視化、ゴールへの道筋表示
 - **Iteration-Drivenアプローチ** - フレームワークの一機能として高速で継続的な価値提供を実現
   - GitHub-Driven: GitHub Issueベースの自動実装ワークフロー
   - Iteration-Driven: 仕様と実装が相互に進化する仕組み
