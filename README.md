@@ -88,6 +88,9 @@ rm -rf /tmp/magiccircle
 ### 基本的な使い方
 
 ```bash
+# 0. GitHub連携を使用する場合（オプション）
+/install-git-app
+
 # 1. ステアリング文書の初期化（推奨）
 /mc:steering-init
 
