@@ -475,13 +475,13 @@ class TypeCoverageGate {
 }
 ```
 
-## まとめ: Magic Circle Evolution with Type-Driven Development
+## まとめ: Magic Circle Iteration with Type-Driven Development
 
-この進化したMagic Circleフレームワークにより：
+この反復型Magic Circleフレームワークにより：
 
 1. **GitHub中心**: すべての仕様がIssueとして管理され、自動実装される
-2. **常に動く**: 変更が自動的に記録され仕様に反映される進化駆動アプローチ
-3. **段階的進化**: 小さな動作可能な単位で開発が進む
+2. **常に動く**: 変更が自動的に記録され仕様に反映される反復駆動アプローチ
+3. **段階的反復**: 小さな動作可能な単位で開発が進む
 4. **継続的デプロイ**: 常に本番にデプロイ可能な状態を維持
 5. **型安全性**: 型カバレッジ95%以上を維持し、破壊的変更を防ぐ
 

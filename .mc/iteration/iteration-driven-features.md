@@ -1,4 +1,4 @@
-# Evolution-Driven Magic Circle Features
+# Iteration-Driven Magic Circle Features
 
 ## Working Copy as Living Spec（作業コピーが生きた仕様）
 
@@ -283,12 +283,12 @@ mc consolidate-specs --from .mc/working/
 # => .mc/specs/auth/login-consolidated.yml
 ```
 
-## Magic Circle Evolution = Continuous Spec Evolution
+## Magic Circle Iteration = Continuous Spec Iteration
 
 この統合により実現できること：
 
-1. **仕様の自動追従**: コードが変わると仕様も自動的に進化
+1. **仕様の自動追従**: コードが変わると仕様も自動的に反復改善
 2. **並行開発**: 複数の仕様/実装を同時に試せる
-3. **履歴の保持**: すべての変更と進化の過程が記録される
+3. **履歴の保持**: すべての変更と反復の過程が記録される
 4. **コンフリクトの受容**: 矛盾する仕様も一時的に共存可能
 5. **継続的な動作**: 常に何かしらが動いている状態を維持

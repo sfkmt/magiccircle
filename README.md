@@ -1,23 +1,37 @@
-# Magic Circle - Claude Code Spec-Driven Development Framework
+# Magic Circle - Goal-Oriented Self-Regulation Framework
 
-Claude Codeに最適化された仕様書駆動開発（Spec-Driven Development）フレームワーク「Magic Circle」です。
+Claude Codeに最適化されたゴール指向型自己制御フレームワーク「Magic Circle」です。
 
 ## 概要
 
-Magic Circle（マジック・サークル）は、仕様書駆動開発プロセスをClaude Codeのスラッシュコマンドで実現した革新的なフレームワークです。AIによる文書生成と人間によるレビューを組み合わせて、高品質なソフトウェア開発を実現します。
+Magic Circle（マジック・サークル）は、AIと人間の協調によるゴール指向型開発を実現するフレームワークです。仕様書駆動開発をベースに、プロジェクトのゴールを明確にし、自律的なフィードバックループを通じて継続的に改善する仕組みを提供します。
 
 *注：このプロジェクトは[Kiro](https://kiro.io/)の仕様書駆動開発のコンセプトにインスパイアされ、それをさらに発展させたものです。*
 
 ## 特徴
 
-- 🎯 **3段階承認プロセス**: 要件定義 → 技術設計 → タスク生成
-- 🤖 **AI支援**: Claude Codeが各フェーズの文書を自動生成
-- 👥 **人間のレビュー必須**: 各フェーズで人間による承認が必要
-- 📁 **整理された構造**: 仕様書は自動的に整理・管理
-- 🔄 **ステアリング文書**: プロジェクトの方向性を継続的に管理
-- 📝 **SOW統合**: 各タスクに対する精密な作業指示書を生成
-- 🔍 **差分管理**: 仕様変更の影響を可視化
-- ⚡ **コンテキスト最適化**: AIへの入力を最適化して精度向上
+### コア機能
+- **ゴール指向型開発**: プロジェクトのゴールを明確に定義し、達成に向けて自律的に進化
+- **自己制御メカニズム**: フィードバックループを通じた継続的な改善
+- **3段階承認プロセス**: 要件定義 → 技術設計 → タスク生成
+- **AIと人間の協調**: Claude Codeによる自動生成と人間のレビュー
+
+### 開発手法
+- **仕様書駆動開発**: 明確な仕様を基にした実装
+- **Iteration-Drivenアプローチ**: 小さな動作可能な単位での高速リリース
+- **型駆動開発**: 型安全性を基盤とした堅牢な実装
+- **常時デプロイ可能**: Progressive Rolloutによる安全なリリース
+
+### 管理機能
+- **ステアリング文書**: プロジェクトの方向性を継続的に管理
+- **SOW統合**: 各タスクに対する精密な作業指示書を生成
+- **差分管理**: 仕様変更の影響を可視化
+- **コンテキスト最適化**: AIへの入力を最適化して精度向上
+
+### 自動化機能
+- **GitHub Actions統合**: 自動実装とPR作成
+- **品質チェック**: リリース前の包括的な品質確認
+- **フックシステム**: カスタマイズ可能なワークフロー
 
 ## クイックスタート
 
@@ -81,24 +95,29 @@ your-project/
 ├── .mc/
 │   ├── steering/          # ステアリング文書
 │   │   └── README.md
-│   └── specs/            # 機能仕様書
-│       └── [feature-name]/
-│           ├── spec.json       # フェーズ承認状態
-│           ├── requirements.md # 要件定義
-│           ├── design.md      # 技術設計
-│           └── tasks.md       # 実装タスク
-├── .mc/
-│   ├── steering/          # ステアリング文書
-│   │   └── README.md
 │   ├── specs/            # 機能仕様書
 │   │   └── [feature-name]/
 │   │       ├── spec.json       # フェーズ承認状態
 │   │       ├── requirements.md # 要件定義
 │   │       ├── design.md      # 技術設計
 │   │       └── tasks.md       # 実装タスク
-│   └── sows/             # Statement of Work
-│       └── [feature-name]/
-│           └── [task-id].md    # タスク別SOW
+│   ├── sows/             # Statement of Work
+│   │   └── [feature-name]/
+│   │       └── [task-id].md    # タスク別SOW
+│   ├── iteration/        # Iteration-Driven開発
+│   │   ├── README.md          # アプローチの説明
+│   │   ├── iteration-driven-features.md
+│   │   ├── github-driven-workflow.md
+│   │   ├── incremental-spec-driven.md
+│   │   └── always-deployable.md
+│   ├── hooks/            # 自動化フック
+│   │   └── pre-implementation-check.sh
+│   ├── scripts/          # ユーティリティスクリプト
+│   │   └── analyze-dependencies.js
+│   └── templates/        # 各種テンプレート
+│       ├── dependency-matrix.md
+│       ├── quality-gates.md
+│       └── schema-first-workflow.md
 └── CLAUDE.md             # Claude Code設定
 ```
 
@@ -116,6 +135,7 @@ your-project/
 | `/mc:spec-tasks` | 実装タスクを生成 |
 | `/mc:spec-approve [name] [phase]` | 指定フェーズを承認 |
 | `/mc:spec-status` | プロジェクト全体の進捗確認 |
+| `/mc:quality-check [path] [options]` | 品質チェックの実行 |
 
 ### SOW統合コマンド
 
@@ -128,20 +148,44 @@ your-project/
 
 ## ワークフロー
 
-### 1. 要件定義フェーズ
+### 従来の仕様駆動開発フロー
+
+#### 1. 要件定義フェーズ
 - AIが機能要件と非機能要件を整理
 - ユーザーストーリーと受け入れ基準を定義
 - 人間がレビューして承認
 
-### 2. 技術設計フェーズ
+#### 2. 技術設計フェーズ
 - アーキテクチャとデータモデルを設計
 - API仕様とコンポーネント構成を定義
 - テスト戦略とデプロイ計画を策定
 
-### 3. タスク生成フェーズ
+#### 3. タスク生成フェーズ
 - 実装可能な単位にタスクを分割
 - 依存関係と見積もり時間を設定
 - 実装順序の推奨を提供
+
+### Iteration-Drivenアプローチ
+
+高速で継続的な価値提供を実現する新しいアプローチ：
+
+#### 1. マイクロ仕様（10分）
+- 最小限の動作可能な仕様を定義
+- 即座に実装可能なスコープに限定
+
+#### 2. 型定義（5分）
+- TypeScriptの型を先に定義
+- 型カバレッジ95%以上を維持
+
+#### 3. 実装（30分）
+- 型に基づいた安全な実装
+- 自動テスト付きで品質確保
+
+#### 4. 自動デプロイ（5分）
+- GitHub Actionsによる自動化
+- Progressive Rolloutで安全にリリース
+
+**結果: 50分で本番デプロイ可能な機能を実現**
 
 ## ベストプラクティス
 
@@ -163,4 +207,4 @@ MIT License
 
 ## 謝辞
 
-このプロジェクトは[Kiro](https://kiro.io/)の仕様書駆動開発の概念にインスパイアされ、それをMagic Circleメソドロジーとして発展させたものです。
+このプロジェクトは[Kiro](https://kiro.io/)の仕様書駆動開発の概念にインスパイアされ、それをゴール指向型自己制御フレームワークとして発展させたものです。

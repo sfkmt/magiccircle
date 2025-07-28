@@ -1,4 +1,4 @@
-# Magic Circle Framework - Evolution-Driven Approach
+# Magic Circle Framework - Iteration-Driven Approach
 
 ## 概要
 
@@ -6,8 +6,8 @@ Magic Circleフレームワークの進化版です。従来の仕様駆動開�
 
 ## コアコンセプト
 
-### Evolution-Driven Development（進化駆動開発）
-- 仕様と実装が相互に進化し続ける
+### Iteration-Driven Development（反復駆動開発）
+- 仕様と実装が相互に反復しながら改善される
 - 小さな動作可能な単位で開発が進む
 - 変更が自動的に記録され、仕様に反映される
 
@@ -18,10 +18,10 @@ Magic Circleフレームワークの進化版です。従来の仕様駆動開�
 - 自動実装とPR作成
 - 45分で本番デプロイ可能
 
-### 2. **Evolution-Driven**
+### 2. **Iteration-Driven**
 - コードの変更を自動的に仕様として記録
 - コンフリクトを含んだまま進行可能
-- 履歴の完全な保持と進化の追跡
+- 履歴の完全な保持と反復の追跡
 
 ### 3. **Type-Driven**
 - 型カバレッジ95%以上を維持
@@ -41,7 +41,7 @@ Magic Circleフレームワークの進化版です。従来の仕様駆動開�
 = 約1ヶ月で機能リリース
 ```
 
-### Evolution-Drivenアプローチ
+### Iteration-Drivenアプローチ
 ```
 マイクロ仕様（10分）→ 型定義（5分）→ 実装（30分）→ 自動デプロイ（5分）
 = 50分で型安全な機能が本番へ
@@ -54,7 +54,7 @@ Magic Circleフレームワークの進化版です。従来の仕様駆動開�
 ### 1. Executable Specifications（実行可能な仕様）
 仕様自体が実行可能で、即座に動作確認できます。
 
-### 2. Continuous Spec Evolution（継続的な仕様進化）
+### 2. Continuous Spec Iteration（継続的な仕様反復）
 実装の変更に応じて仕様が自動的に更新されます。
 
 ### 3. Progressive Type Migration（段階的型移行）
@@ -68,16 +68,16 @@ Magic Circleフレームワークの進化版です。従来の仕様駆動開�
 既存のMagic Circleプロジェクトに段階的に適用できます：
 
 ```bash
-# Evolution-Driven機能を有効化
-mc enable-evolution --progressive
+# Iteration-Driven機能を有効化
+mc enable-iteration --progressive
 
 # 最初のマイクロ仕様を作成
 mc create-micro-spec "簡単なヘルスチェックAPI"
 
-# 自動進化を開始
-mc start-evolution-daemon
+# 自動反復を開始
+mc start-iteration-daemon
 ```
 
 ## まとめ
 
-Magic CircleのEvolution-Drivenアプローチにより、仕様駆動開発の堅実さとアジャイル開発のスピードを両立できます。「型は嘘をつかない」原則のもと、常に安全で、常に動き、常に進化し続ける開発が実現されます。
+Magic CircleのIteration-Drivenアプローチにより、仕様駆動開発の堅実さとアジャイル開発のスピードを両立できます。「型は嘘をつかない」原則のもと、常に安全で、常に動き、常に反復改善し続ける開発が実現されます。

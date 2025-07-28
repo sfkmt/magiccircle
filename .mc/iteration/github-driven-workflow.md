@@ -58,7 +58,7 @@ test('endpoint returns ok', async () => {
 - [ ] テスト通過後、本番環境へ自動昇格
 ```
 
-### 3. Continuous Auto-Evolution
+### 3. Continuous Auto-Iteration
 ```bash
 #!/bin/bash
 # .mc/hooks/auto-evolve.sh
@@ -128,10 +128,10 @@ jobs:
             --body "Closes #${{ github.event.issue.number }}"
 ```
 
-### Continuous Spec Evolution
+### Continuous Spec Iteration
 ```yaml
-# .github/workflows/spec-evolution.yml
-name: Spec Evolution
+# .github/workflows/spec-iteration.yml
+name: Spec Iteration
 
 on:
   pull_request:
@@ -159,7 +159,7 @@ jobs:
           ./mc create-next-issues --from next-specs.md
 ```
 
-## Evolution-Driven Features
+## Iteration-Driven Features
 
 ### 1. Spec Snapshots（仕様スナップショット）
 ```bash

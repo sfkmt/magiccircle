@@ -5,6 +5,30 @@ All notable changes to the MC (Magic Circle) Framework will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2025-07-28
+
+### Changed
+- **フレームワーク名の明確化**: Goal-Oriented Self-Regulation Framework「Magic Circle」として再定義
+  - 仕様書駆動開発からゴール指向型自己制御フレームワークへの進化
+  - プロジェクトのゴールを明確にし、自律的なフィードバックループを通じて継続的に改善
+
+### Added
+- **Iteration-Drivenアプローチ** - フレームワークの一機能として高速で継続的な価値提供を実現
+  - GitHub-Driven: GitHub Issueベースの自動実装ワークフロー
+  - Iteration-Driven: 仕様と実装が相互に進化する仕組み
+  - Type-Driven: 型安全性を基盤とした段階的移行
+  - Deployment-Driven: 常時デプロイ可能なアーキテクチャ
+- **実行可能な仕様（Executable Specifications）**
+  - マイクロ仕様による段階的開発
+  - 自動的な仕様の進化と追跡
+  - Progressive Rolloutによる安全なデプロイ
+  - 型カバレッジ95%以上の維持
+- **新規ディレクトリ構造**
+  - `.mc/iteration/` - Iteration-Driven開発の詳細文書
+  - `.mc/hooks/pre-implementation-check.sh` - 実装前の自動チェック
+  - `.mc/scripts/analyze-dependencies.js` - 依存関係分析スクリプト
+  - `.mc/templates/` - 各種開発テンプレート
+
 ## [2.2.0] - 2025-07-28
 
 ### Added
