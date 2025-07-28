@@ -120,6 +120,9 @@ rm -rf /tmp/magiccircle
 
 ```
 your-project/
+├── .github/
+│   └── workflows/         # GitHub Actions ワークフロー
+│       └── magic-circle-sync.yml  # プロジェクト状態の自動同期
 ├── .claude/
 │   └── commands/          # スラッシュコマンド定義
 │       ├── mc:steering-init.md
