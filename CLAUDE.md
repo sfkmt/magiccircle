@@ -2,6 +2,20 @@
 
 このプロジェクトは、Claude Codeを使用した仕様書駆動開発（Spec-Driven Development）を実践します。
 
+## 現在のステータス
+_最終更新: [/mc:spec-status で自動更新されます]_
+
+### アクティブな作業
+- **仕様**: [未設定]
+- **フェーズ**: [未設定]
+- **GitHub Issue**: [未設定]
+- **次のアクション**: `/mc:steering-init`
+
+### スプリント情報
+- **現在**: [未設定]
+- **進捗**: 0/0 SP
+- **終了予定**: [未設定]
+
 ## 概要
 
 このプロジェクトでは、以下の3段階承認プロセスを通じて、品質の高いソフトウェア開発を実現します：
@@ -16,25 +30,51 @@
 .mc/
 ├── steering/          # プロジェクトのステアリング文書
 │   └── README.md      # プロジェクトの方向性と目的
-└── specs/            # 機能仕様書
-    └── [feature-name]/
-        ├── spec.json       # フェーズ承認状態の追跡
-        ├── requirements.md # 機能要件
-        ├── design.md      # 技術設計
-        └── tasks.md       # 実装タスク
+├── specs/            # 機能仕様書
+│   └── [feature-name]/
+│       ├── spec.json       # フェーズ承認状態の追跡
+│       ├── requirements.md # 機能要件
+│       ├── design.md      # 技術設計
+│       └── tasks.md       # 実装タスク
+├── iterations/       # スプリント管理
+│   ├── current.json  # 現在のスプリント情報
+│   ├── sprint-*.json # スプリント履歴
+│   └── metrics.json  # ベロシティ等のメトリクス
+├── deploys/          # デプロイメント管理
+│   ├── candidates.jsonl    # デプロイ候補
+│   ├── history.jsonl      # デプロイ履歴
+│   └── [env]-[version].yaml # デプロイマニフェスト
+├── cache/            # 状態キャッシュ
+│   └── last-status.json   # 最終状態のスナップショット
+└── commands/         # コマンド定義
+    └── mc:*.md       # 各コマンドの詳細仕様
 ```
 
 ## 利用可能なスラッシュコマンド
 
 ### 基本コマンド
-- `/mc:steering-init` - ステアリング文書の初期化
+- `/mc:steering-init` - ステアリング文書の初期化（GitHub環境セットアップ含む）
 - `/mc:steering-update` - ステアリング文書の更新
 - `/mc:spec-init` - 新機能の仕様書作成開始
 - `/mc:spec-requirements` - 要件定義文書の生成
 - `/mc:spec-design` - 技術設計文書の作成
 - `/mc:spec-tasks` - 実装タスクの生成
-- `/mc:spec-status` - 現在のプロジェクト進捗確認
+- `/mc:spec-status` - 現在のプロジェクト進捗確認（再開機能強化版）
 - `/mc:spec-approve` - フェーズの承認
+
+### イテレーション管理コマンド
+- `/mc:iteration-plan` - スプリント計画の作成・管理
+  - `create` - 新しいスプリント作成
+  - `update` - 進捗更新
+  - `close` - スプリント終了とレトロスペクティブ
+  - `status` - 現在の状況表示
+- `/mc:github-issue-create` - GitHub Issue自動作成（スプリント・デプロイ統合）
+
+### デプロイ管理コマンド
+- `/mc:deploy-prepare` - デプロイメント準備とリリース管理
+  - 環境別設定（dev/staging/prod）
+  - リリースノート自動生成
+  - ロールバック計画
 
 ### SOW統合コマンド
 - `/mc:sow-create` - 作業用SOWの生成
@@ -42,10 +82,16 @@
 - `/mc:spec-diff` - 仕様書の差分表示
 - `/mc:context-optimize` - AIコンテキストの最適化
 
+### 分析コマンド
+- `/mc:feedback-analyze` - 実装フィードバック分析
+- `/mc:quality-check` - 品質チェック
+- `/mc:workflow-trigger` - ワークフロートリガー
+
 ## 開発フロー
 
-1. **ステアリング文書の作成**（推奨）
-   - `/mc:steering-init`を実行してプロジェクトの方向性を定義
+1. **ステアリング文書の作成**（必須）
+   - `/mc:steering-init`を実行してGitHub環境をセットアップ
+   - プロジェクトの方向性を定義
 
 2. **機能仕様の作成**
    - `/mc:spec-init [feature-name]`で新機能の仕様書作成を開始
@@ -67,6 +113,8 @@
 - **フェーズをスキップしない** - 各フェーズは順番に完了させる
 - **人間によるレビュー必須** - AIが生成した文書は必ず人間がレビュー
 - **承認の明示的な記録** - spec.jsonで各フェーズの承認状態を管理
+- **現在地の正確な把握** - `/mc:spec-status --sync`で常に最新状態を確認
+- **変更履歴の追跡** - CHANGELOG.mdとリリースノートですべてを記録
 
 ## 自動化機能
 
@@ -119,3 +167,81 @@
 - ステアリング文書は定期的に更新し、プロジェクトの方向性を維持します
 - GitHub Actions利用にはサブスクリプションプランのClaude Codeが必要です
 - Hooksは`.mc/hooks/`で設定可能です
+- **Claude Code再起動時**: 必ず`/mc:spec-status --resume`を実行して現在地を確認
+
+## クイックスタート
+
+### 新規プロジェクトの場合
+```bash
+# 1. GitHub環境のセットアップとステアリング文書作成
+/mc:steering-init
+
+# 2. 最初の機能仕様を作成
+/mc:spec-init my-first-feature
+
+# 3. 要件定義を生成
+/mc:spec-requirements
+
+# 4. レビュー後、承認
+/mc:spec-approve requirements
+
+# 5. 以降、design → tasks と進める
+```
+
+### Claude Code再起動時
+```bash
+# 1. 現在地の確認と同期
+/mc:spec-status --sync
+
+# 2. 再開用のコンテキスト取得
+/mc:spec-status --resume
+
+# 3. 推奨されたコマンドを実行
+```
+
+### スプリント開始時
+```bash
+# 1. 新しいスプリントを作成
+/mc:iteration-plan create --sprint-length 14 --capacity 40
+
+# 2. タスクをGitHub Issueとして作成
+/mc:github-issue-create [spec-name] --sprint 1
+
+# 3. 進捗を追跡
+/mc:iteration-plan status
+```
+
+### デプロイ準備時
+```bash
+# 1. デプロイ準備（staging環境）
+/mc:deploy-prepare staging --release-notes
+
+# 2. 本番デプロイ準備
+/mc:deploy-prepare prod --version v2.4.0 --rollback-plan
+```
+
+## トラブルシューティング
+
+### 状態が不明な場合
+```bash
+/mc:spec-status --sync --detailed
+```
+
+### GitHubとの同期エラー
+```bash
+gh auth status  # 認証状態確認
+gh auth login   # 再認証
+```
+
+### スプリント情報が見つからない
+```bash
+/mc:iteration-plan status  # 現在のスプリント確認
+/mc:iteration-plan create  # 新規作成
+```
+
+---
+# important-instruction-reminders
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
