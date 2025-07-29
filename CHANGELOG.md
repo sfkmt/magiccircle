@@ -5,6 +5,35 @@ All notable changes to the MC (Magic Circle) Framework will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- `/mc:iteration-plan` - スプリント計画管理コマンド（create/update/close/statusアクション）
+- `/mc:deploy-prepare` - デプロイメント準備とリリース管理コマンド
+- リリースノート自動生成機能（`/mc:deploy-prepare --release-notes`）
+- CHANGELOG.md自動更新機能（すべてのコマンドに統合）
+
+### Changed
+- `/mc:steering-init` - GitHub環境の初期設定機能を追加（リポジトリ確認、初期コミット、GitHub App接続確認）
+- `/mc:spec-status` - Claude Code再起動時の確実な状態復帰機能を強化
+  - `--sync`オプションでGitHubと完全同期
+  - `--resume`オプションで再開用コンテキスト生成
+  - CLAUDE.mdへの現在ステータス自動記録
+- `/mc:github-issue-create` - 完全なイテレーション・デプロイ駆動統合
+  - `--sprint`オプションでスプリント割り当て
+  - `--deploy-target`オプションでデプロイ環境指定
+  - タスクタイプの自動分類（feature/bug/refactor/docs/test/infra）
+  - ストーリーポイントの自動計算
+- `/mc:spec-approve` - イテレーション計画とデプロイパイプラインへの自動統合
+
+### Infrastructure
+- 5つの駆動方式の完全統合：
+  - 仕様書駆動（Spec-Driven）: ★★★★★
+  - GitHub Issue駆動（Issue-Driven）: ★★★★★
+  - イテレーション駆動（Iteration-Driven）: ★★★★★
+  - タイプ駆動（Type-Driven）: ★★★★★
+  - デプロイ駆動（Deploy-Driven）: ★★★★★
+
 ## [2.3.0] - 2025-07-28
 
 ### Changed
