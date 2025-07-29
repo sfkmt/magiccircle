@@ -152,27 +152,71 @@ AIアシスタントへの指示：
 [YYYY-MM-DD HH:MM:SS]
 ```
 
-5. **CLAUDE.mdの更新**：
+5. **CLAUDE.mdの更新（必須）**：
    ```bash
-   # 現在のステータスセクションを更新
-   # 既存のセクションがあれば置換、なければ追加
+   # 現在のステータスセクションを必ず更新
+   # sedコマンドで既存セクションを置換
    ```
 
-   CLAUDE.mdに追加する内容：
+   CLAUDE.mdの更新処理（必ず実行）：
+   ```bash
+   # 1. 現在のステータスセクションの開始位置を検索
+   start_line=$(grep -n "^## 現在のステータス" CLAUDE.md | cut -d: -f1)
+   
+   # 2. 次のセクション（## 概要）の位置を検索
+   end_line=$(grep -n "^## 概要" CLAUDE.md | cut -d: -f1)
+   
+   # 3. 新しいステータス内容を作成
+   cat > .mc/cache/new-status.md << EOF
+## 現在のステータス
+_最終更新: $(date -Iseconds)_
+
+### アクティブな作業
+- **仕様**: [spec-name]
+- **フェーズ**: [phase]
+- **GitHub Issue**: #[number]
+- **次のアクション**: \`[command]\`
+
+### スプリント情報
+- **現在**: Sprint-[number]
+- **進捗**: [completed]/[total] SP
+- **終了予定**: [date]
+
+EOF
+   
+   # 4. CLAUDE.mdを更新
+   if [ -n "$start_line" ] && [ -n "$end_line" ]; then
+     # 既存のセクションを置換
+     head -n $((start_line - 1)) CLAUDE.md > CLAUDE.md.tmp
+     cat .mc/cache/new-status.md >> CLAUDE.md.tmp
+     tail -n +$end_line CLAUDE.md >> CLAUDE.md.tmp
+     mv CLAUDE.md.tmp CLAUDE.md
+   else
+     echo "Error: Could not find status section in CLAUDE.md"
+   fi
+   
+   # 5. 更新をコミット（オプション）
+   if [ "$AUTO_COMMIT" = "true" ]; then
+     git add CLAUDE.md
+     git commit -m "chore: update project status in CLAUDE.md"
+   fi
+   ```
+
+   更新される内容の例：
    ```markdown
    ## 現在のステータス
-   _最終更新: [timestamp]_
+   _最終更新: 2025-01-29T15:30:00+09:00_
    
    ### アクティブな作業
-   - **仕様**: [spec-name]
-   - **フェーズ**: [phase]
-   - **GitHub Issue**: #[number]
-   - **次のアクション**: `[command]`
+   - **仕様**: user-authentication
+   - **フェーズ**: design
+   - **GitHub Issue**: #15, #16, #17
+   - **次のアクション**: `/mc:spec-approve design`
    
    ### スプリント情報
-   - **現在**: Sprint-[number]
-   - **進捗**: [completed]/[total] SP
-   - **終了予定**: [date]
+   - **現在**: Sprint-3
+   - **進捗**: 15/40 SP
+   - **終了予定**: 2025-02-12
    ```
 
 6. **キャッシュの保存**：
@@ -215,3 +259,35 @@ AIアシスタントへの指示：
 - **永続性**: CLAUDE.mdとキャッシュに状態を保存
 - **完全性**: GitHubとローカルの両方の情報を統合
 - **実用性**: 次のアクションを明確に提示
+- **必須更新**: CLAUDE.mdの現在のステータスセクションは必ず更新する
+- **エラー処理**: CLAUDE.md更新に失敗した場合は警告を表示し、手動更新を促す
+
+### CLAUDE.md更新の保証
+
+以下の手順で確実にCLAUDE.mdを更新：
+
+1. **更新前チェック**
+   - CLAUDE.mdファイルの存在確認
+   - 書き込み権限の確認
+   - 現在のステータスセクションの存在確認
+
+2. **更新処理**
+   - 一時ファイルを使用して安全に更新
+   - 更新失敗時は元のファイルを保持
+   - 成功時のみ新しい内容に置換
+
+3. **更新後の検証**
+   - 更新されたタイムスタンプの確認
+   - 新しい内容が正しく書き込まれたか検証
+   - 更新内容をユーザーに表示
+
+4. **エラー時の対処**
+   ```bash
+   if [ $? -ne 0 ]; then
+     echo "⚠️ CLAUDE.mdの自動更新に失敗しました"
+     echo "以下の内容を手動でCLAUDE.mdの'現在のステータス'セクションに貼り付けてください："
+     cat .mc/cache/new-status.md
+   else
+     echo "✅ CLAUDE.mdを更新しました"
+   fi
+   ```
